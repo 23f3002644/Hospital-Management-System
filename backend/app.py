@@ -35,16 +35,9 @@ with app.app_context():
     db.session.commit()
 
     if not app.security.datastore.find_user(email="admin@gmail.com"):
-        app.security.datastore.create_user(email="admin@gmail.com", password=hash_password("123456"), roles=['admin', 'doctor', 'patient'])
+        app.security.datastore.create_user(email="admin@gmail.com", password=hash_password("123456"), roles=['admin'])
     db.session.commit()
 
-    if not app.security.datastore.find_user(email="akash@gmail.com"):
-        app.security.datastore.create_user(email="akash@gmail.com", password=hash_password("123456"), roles=['patient'])
-    db.session.commit()
-
-    if not app.security.datastore.find_user(email="amit@gmail.com"):
-        app.security.datastore.create_user(email="amit@gmail.com", password=hash_password("123456"), roles=['doctor'])
-    db.session.commit()
 
 from routes import *    
 

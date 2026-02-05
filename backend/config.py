@@ -18,7 +18,7 @@ class LocalDevelopmentConfig(Baseconfig):
     #configurtion for security
     SECRET_KEY = os.environ.get("SECRET_KEY")
     SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")
-    SECURITY_PASSWORD_HASH = "bcrypt"
+    SECURITY_PASSWORD_HASH = "argon2"
     WTF_CSRF_ENABLED = False #only for forms
     SECURITY_TOKEN_AUTHENTICATION_HEADER = "Authentication-Token"
 

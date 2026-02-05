@@ -10,8 +10,8 @@ class BaseModel(db.Model):
 
 class User(BaseModel, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    fs_uniquifier = db.Column(db.String(10000), unique=True, nullable=False)
+    password = db.Column(db.String(500), nullable=False)
+    fs_uniquifier = db.Column(db.String(1000), unique=True, nullable=False)
     active = db.Column(db.Boolean(), default=True)
     roles = db.relationship('Role', secondary='user_roles', backref="users")   #User => user, Role => role, UserRoles => user_roles
 
@@ -26,7 +26,6 @@ class UserRoles(BaseModel):
 class Patient(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
-    type = db.Column(db.String(50),nullable=False, default='patient')  # 'patient' or 'admin'
     age = db.Column(db.Integer, nullable=False)
     address = db.Column(db.String(200), nullable=False)
     contact_number = db.Column(db.String(15), nullable=False)
@@ -35,23 +34,26 @@ class Patient(BaseModel):
 class Doctor(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name= db.Column(db.String(100), nullable=False)
+    age= db.Column(db.Integer, nullable=False)
+    gender= db.Column(db.String(10), nullable=False)
     specialty= db.Column(db.String(100), nullable=False)
     department_name= db.Column(db.String(100), db.ForeignKey('departments.name'), nullable=False)
     contact_number= db.Column(db.String(15), nullable=False)
     address= db.Column(db.String(200), nullable=False)
     description= db.Column(db.Text, nullable=True)
-    dept = db.relationship('Departments', backref=db.backref('doctor', lazy=True))
-
+    
 class Appointment(BaseModel):
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'),nullable=False)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'),nullable=False)
     department_name = db.Column(db.String(100),db.ForeignKey('departments.name'), nullable=False)
     time = db.Column(db.Time, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     status = db.Column(db.String(50), nullable=False, default='booked')  # 'booked', 'completed', 'canceled' 
 
 class Departments(BaseModel):
     name = db.Column(db.String(100), unique=True, nullable=False)
-    overview = db.Column(db.Text, nullable=False)    
+    overview = db.Column(db.Text, nullable=False)   
+    doctors = db.relationship('Doctor', backref='department', lazy=True)
 
 class Treatment(BaseModel):
     appointment_id = db.Column(db.Integer,db.ForeignKey('appointment.id'), nullable=False)
