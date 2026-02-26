@@ -29,3 +29,4 @@ npm run dev
 
 Further import flask SQLAlchemy using command-"pip install flask-sqlalchemy"
 Further import flask Security using command- "pip install flask-security"
+Further install the flask CORS using the command- "pip install flask-cors"

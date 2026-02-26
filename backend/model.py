@@ -66,5 +66,15 @@ class Treatment(BaseModel):
     medicines = db.Column(db.Text, nullable=True)
     visit_type = db.Column(db.String(50), nullable=False)  # 'in-person' or 'outpatient'
     notes = db.Column(db.Text, nullable=True)
+
+
+class AvailableSlot(BaseModel):
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    start_time = db.Column(db.Time, nullable=False)
+    doctor = db.relationship('Doctor', backref='available_slots', lazy=True)
+    is_available = db.Column(db.Boolean, default=False)
+    status = db.Column(db.Boolean, default=True)
+
     
     
