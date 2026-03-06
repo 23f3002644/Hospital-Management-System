@@ -1,25 +1,22 @@
 <template>
-<div>
+<div class="dashboard-container">
     <div class="dashboard-stats mb-5 mt-4">
     <!-- ROW 1: Patients + Doctors + Appointments -->
     <div class="row g-4 mb-4">
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="stat-card h-100 text-center p-4 bg-primary text-white rounded shadow">
-                <i class="fas fa-user-md fa-3x mb-3"></i>
+            <div class="stat-card h-100 text-center p-4 violet-primary text-white rounded shadow">
                 <h3 class="mb-2">Total Patients</h3>
                 <h2 class="display-4 fw-bold mb-0">{{ totalPatients }}</h2>
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="stat-card h-100 text-center p-4 bg-success text-white rounded shadow">
-                <i class="fas fa-stethoscope fa-3x mb-3"></i>
+            <div class="stat-card h-100 text-center p-4 violet-success text-white rounded shadow">
                 <h3 class="mb-2">Total Doctors</h3>
                 <h2 class="display-4 fw-bold mb-0">{{ totalDoctors }}</h2>
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="stat-card h-100 text-center p-4 bg-info text-white rounded shadow">
-                <i class="fas fa-calendar-check fa-3x mb-3"></i>
+            <div class="stat-card h-100 text-center p-4 violet-info text-white rounded shadow">
                 <h3 class="mb-2">Total Appointments</h3>
                 <h2 class="display-4 fw-bold mb-0">{{ totalAppointments }}</h2>
             </div>
@@ -29,22 +26,19 @@
     <!-- ROW 2: Upcoming + Departments + Treatments -->
     <div class="row g-4">
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="stat-card h-100 text-center p-4 bg-warning text-dark rounded shadow">
-                <i class="fas fa-clock fa-3x mb-3"></i>
+            <div class="stat-card h-100 text-center p-4 violet-warning text-white rounded shadow">
                 <h3 class="mb-2">Upcoming Appointments</h3>
                 <h2 class="display-4 fw-bold mb-0">{{ totalUpcomingAppointments }}</h2>
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="stat-card h-100 text-center p-4 bg-danger text-white rounded shadow">
-                <i class="fas fa-building fa-3x mb-3"></i>
+            <div class="stat-card h-100 text-center p-4 violet-danger text-white rounded shadow">
                 <h3 class="mb-2">Total Departments</h3>
                 <h2 class="display-4 fw-bold mb-0">{{ totalDepartments }}</h2>
             </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="stat-card h-100 text-center p-4 bg-secondary text-white rounded shadow">
-                <i class="fas fa-capsules fa-3x mb-3"></i>
+            <div class="stat-card h-100 text-center p-4 violet-secondary text-white rounded shadow">
                 <h3 class="mb-2">Total Treatments</h3>
                 <h2 class="display-4 fw-bold mb-0">{{ totalTreatments }}</h2>
             </div>
@@ -56,7 +50,7 @@
     <!-- Chart 1 - Left -->
     <div class="chart-container" style="height: 400px; flex: 1; min-width: 300px; margin-bottom: 50px;">
         <h5 style="margin-bottom: 15px;">Appointment Status Chart</h5>
-        <div style="position: relative; height: 350px;">
+        <div style="position: relative; height: 300px;">
             <canvas ref="appointmentStatusChart"></canvas>
         </div>
     </div>
@@ -64,19 +58,17 @@
     <!-- Chart 2 - Right -->
     <div class="chart-container" style="height: 400px; flex: 1; min-width: 300px; margin-bottom: 50px;">
         <h5 style="margin-bottom: 15px;">Doctor Distribution Chart</h5>
-        <div style="position: relative; height: 350px;">
+        <div style="position: relative; height: 300px;">
             <canvas ref="doctorDistributionChart"></canvas>
         </div>
     </div>
     </div>
-
 </div>
 </template>
+
 <script>
 import axios from 'axios';
-import Appointment from '../Patients/Appointment.vue';
 import {Chart}  from 'chart.js/auto';
-import { render } from 'vue';
 
 export default {
     name: "AdminDashboard",
@@ -99,25 +91,24 @@ export default {
         this.dashboardLoad()
     },
     watch: {
-    appointments: {
-        handler() {
-            // Debounce to prevent rapid re-renders
-            clearTimeout(this.chartTimeout);
-            this.chartTimeout = setTimeout(() => {
-                this.$nextTick(() => this.renderCharts());
-            }, 100);
+        appointments: {
+            handler() {
+                clearTimeout(this.chartTimeout);
+                this.chartTimeout = setTimeout(() => {
+                    this.$nextTick(() => this.renderCharts());
+                }, 100);
+            },
+            deep: true
         },
-        deep: true
-    },
-    doctors: {
-        handler() {
-            clearTimeout(this.chartTimeout);
-            this.chartTimeout = setTimeout(() => {
-                this.$nextTick(() => this.renderCharts());
-            }, 100);
-        },
-        deep: true
-    }
+        doctors: {
+            handler() {
+                clearTimeout(this.chartTimeout);
+                this.chartTimeout = setTimeout(() => {
+                    this.$nextTick(() => this.renderCharts());
+                }, 100);
+            },
+            deep: true
+        }
 },
     methods: {
         tokenload() {
@@ -208,7 +199,7 @@ export default {
         const doctorCounts = {};
         this.doctors.forEach(doc => {
             if (doc.department_name) {
-                doctorCounts[doc.department_name] = (doctorCounts[doc.name] || 0) + 1;
+                doctorCounts[doc.department_name] = (doctorCounts[doc.department_name] || 0) + 1;
             }
         });
 
@@ -262,69 +253,71 @@ export default {
         },
         totalTreatments() {
             return this.treatments.length;
-        },
-        // statusOfAppointmenta(){
-        //     const statusCounts = {};
-        //     this.appointments.forEach(appointment => {
-        //         const status = appointment.status;
-        //         if (statusCounts[status]) {
-        //             statusCounts[status]++;
-        //         } else {
-        //             statusCounts[status] = 1;
-        //         }
-        //     });
-        //     return {
-        //         labels: Object.keys(statusCounts),
-        //         datasets: [{
-        //             label: 'Number of Appointments by Status',
-        //             data: Object.values(statusCounts),
-        //             backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        //             borderColor: 'rgba(75, 192, 192, 1)',
-        //             borderWidth: 1
-        //         }]
-        //     }
-        // },
-        // doctorDistribution(){
-        //     const doctorCounts = {};
-        //     this.doctors.forEach(doctor => {
-        //         const department = doctor.department_name;
-        //         if (doctorCounts[department]) {
-        //             doctorCounts[department]++;
-        //         } else {
-        //             doctorCounts[department] = 1;
-        //         }
-        //     });
-        //     return {
-        //         labels: Object.keys(doctorCounts),
-        //         datasets: [{
-        //             label: 'Number of Doctors per Department',
-        //             data: Object.values(doctorCounts),
-        //             backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        //             borderColor: 'rgba(75, 192, 192, 1)',
-        //             borderWidth: 1
-        //         }]
-        //     }
-        // }
+        }
 
 }
 }
+
 
 </script>
+
 <style scoped>
+.dashboard-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e8d5f8 0%, #c4b5fd 50%, #8b5cf6 100%);
+    padding: 2rem;
+}
+
+/* Replace Bootstrap colors with Blue-Violet theme */
+.violet-primary {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+}
+
+.violet-success {
+    background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%) !important;
+}
+
+.violet-info {
+    background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%) !important;
+}
+
+.violet-warning {
+    background: linear-gradient(135deg, #c084fc 0%, #e879f9 100%) !important;
+}
+
+.violet-danger {
+    background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%) !important;
+}
+
+.violet-secondary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+}
+
 .stat-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
     cursor: pointer;
+    border-radius: 20px !important;
+    backdrop-filter: blur(10px);
 }
 
 .stat-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 25px 50px rgba(139,92,246,0.4) !important;
 }
 
 .display-4 {
     font-size: 2.5rem;
     font-weight: 700;
+}
+
+.chart-container {
+    background: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(15px);
+    border-radius: 20px !important;
+    border: 1px solid rgba(139,92,246,0.3);
+    padding: 2rem !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
 }
 
 @media (max-width: 768px) {
@@ -333,6 +326,9 @@ export default {
     }
     .stat-card {
         margin-bottom: 1rem;
+    }
+    .dashboard-container {
+        padding: 1rem;
     }
 }
 </style>

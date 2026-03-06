@@ -1,0 +1,4 @@
+Sr No.,Doctor Name,Department name,Diagnosis,Test Done,Prescription,Medicines,Notes,Date
+1,Dr. Diksha,Cardiology,Acute Coronary Syndrome,"ECG, Troponin levels, Echocardiogram","Dual Antiplatelet Therapy, Statin","Aspirin 75mg daily, Clopidogrel 75mg daily, Atorvastatin 40mg nightly",Cardiac rehab referral; low-salt diet; follow-up angiogram in 1 week,2026-03-04
+2,Dr. Naina,Neurology,Epilepsy (Temporal Lobe),"EEG, MRI Brain, Video telemetry",Anti-epileptic monotherapy,"Levetiracetam 500mg BD, Clobazam 5mg HS",Driving ban 6 months; seizure diary; follow-up EEG 3 months,2026-03-04
+3,Dr. Diksha,Cardiology,Arrhythmia (AF),"Holter monitoring, Thyroid function",Rate control + Anticoagulation,"Metoprolol 25mg BD, Apixaban 5mg BD",CHA2DS2-VASc score 3; annual echo; avoid alcohol,2026-03-04

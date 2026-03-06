@@ -15,8 +15,6 @@ export default {
     },
     methods:{
         loginUser(){
-            // event.preventDefault()
-            // console.log(`Username: ${this.formData.username}, Password: ${this.formData.password}`)
             const response = axios.post("http://127.0.0.1:5000/api/login", JSON.stringify(this.formData), {
                 headers: {
                     "Content-Type": "application/json",
@@ -41,12 +39,6 @@ export default {
                     }
                     
             }).catch(err => this.error = err.response.data.message)
-
-
-            // alternative
-            // catch((err) => {
-            //     this.error = err.response.data.message
-            // })
         }
     }
 }
@@ -75,8 +67,6 @@ export default {
                 <RouterLink class="navbar-brand" to="/">Back</RouterLink>
                </div>
                </form>
-               
-               <!-- <button @click="logoutUser" class="btn btn-danger">Logout</button> -->
             </div>
         </div>
     </div>

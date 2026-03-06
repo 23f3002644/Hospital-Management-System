@@ -1,4 +1,3 @@
-
 <template>
   <div class="landing-container">
     <div class="content">
@@ -25,6 +24,8 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
+
+
 </script>
 
 <style scoped>

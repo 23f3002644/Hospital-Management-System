@@ -1,4 +1,5 @@
 from flask import current_app as app, request, jsonify # prosess called modulirisation
+from flask import send_from_directory
 #from app import app   ( to avoid circular import)
 from database import db
 from flask_login import login_user
@@ -9,6 +10,9 @@ from flask_security.utils import verify_password
 from model import *
 import json
 from datetime import datetime, date, time
+from task import csv_report , monthly_report, generate_msg
+from celery.result import AsyncResult
+
 
 
 #login api route
@@ -236,7 +240,9 @@ def appointment():
 
     doctor_obj = Doctor.query.filter_by(name=doctor).first()
     patient_id = Patient.query.filter_by(user_id=current_user.id).first().id
+    patient_name = Patient.query.filter_by(user_id=current_user.id).first().name
     doctor_id = doctor_obj.id if doctor_obj else None
+
     if not doctor_obj:
         return jsonify({"message": "Doctor not found", "status_code": 404})
 
@@ -246,6 +252,7 @@ def appointment():
     slot = AvailableSlot.query.filter_by(doctor_id=doctor_id, date=py_date, start_time=py_time,is_available=True).first()
     slot.status = False
     db.session.commit()
+    res = generate_msg.delay(patient_name, py_date, py_time, doctor)
     return jsonify({"message": "Appointment created successfully", "status_code": 201})
 
 @app.route("/api/cancel_appointment/<int:appointment_id>", methods=["PUT"])
@@ -556,9 +563,6 @@ def department_doctors(department_id):
         doctor_data = {
             "id": doctor.id,
             "name": doctor.name
-            # "gender":doctor.gender,
-            # "specialty": doctor.specialty,
-            # "description": doctor.description
         }
         doctor_list.append(doctor_data)
     return {"doctors": doctor_list,"department_views": depart_views, "status_code": 200}
@@ -631,14 +635,40 @@ def add_available_slot(doctor_id):
                     db.session.add(new_slot)
     db.session.commit()
 
-    # date = request.json.get("date")
-    # start_time = request.json.get("start_time")
-
-    # py_date = datetime.strptime(date, "%Y-%m-%d").date() # string → date
-    # py_time = datetime.strptime(start_time, "%H:%M").time() # string → time
-
-    # new_slot = AvailableSlot(doctor_id=doctor_id, date=py_date, start_time=py_time)
-    # db.session.add(new_slot)
-    # db.session.commit()
-
     return {"message": "Weekly availability updated successfully", "status_code": 201}
+
+
+#backend jobs trigger
+
+
+
+@app.route('/export_csv/<int:patient_id>')
+def export(patient_id):
+ 
+    result = csv_report.delay(patient_id)
+    return jsonify( {
+        "task_id": result.id, 
+        "status": "queued", 
+        "check_status": f"/api/csv_result/{result.id}"
+        })
+
+@app.route('/api/csv_result/<task_id>') # just create to test the status of result
+def csv_result(task_id):
+    res = AsyncResult(task_id)
+    if res.ready():
+        if res.successful() and res.result:
+            return send_from_directory('static', res.result)
+        else:
+            return jsonify({"error": "Task failed"}), 400
+        
+    return  jsonify({
+        "task_id": task_id,
+        "status": res.status,
+        "result":res.result
+    })   
+ 
+
+@app.route('/api/send_mail')
+def send_mail():
+    res = monthly_report.delay()
+    return {"message": res.result}

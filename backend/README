@@ -1,0 +1,56 @@
+# Hospital-Management-System
+This is Hospital Management System web application that  allows Admins, Doctors, and Patients to interact with the system based on their roles.
+
+Framework to use:
+1) Flask for API
+2) VueJS for UI
+3) VueJS Advanced with CLI
+4) Jinja2 templates if using CDN only for entry point
+5) Bootstrap for HTML generation and Styling
+6) SQLite for Databases
+7) Redis for caching
+8) Redis and Celery for batch jobs.
+
+
+                                            Process of Making
+# In Windows                                            
+
+Created the Virtual environment in backend by using the code- "python -m venv myenv" in windows
+Activating the virtual environment by using the code- ".\myenv\Scripts\Activate" in windows
+Deactivate by using "deactivate"
+Installing the flask by using the code- "pip3 install flask"
+Installed the flask cors, in order to render out the data to specific link/path, by code- "pip install flask-cors"
+
+Coming to Frontend, using Command Line Interface(CLI), I run-"npm create vue@latest"
+Further I ran as recommended in the Terminal--
+
+cd Hospital-project
+npm install
+npm run dev
+
+Further import flask SQLAlchemy using command-"pip install flask-sqlalchemy"
+Further import flask Security using command- "pip install flask-security"
+Further install the flask CORS using the command- "pip install flask-cors"
+
+# In WSL
+
+1) Creating virtual environment in wsl by the code "source venv/bin/activate"
+2) Installing Caching by the code "pip install Flask-Caching"
+3) Install all the dependecies of the backend by the code "pip3 install -r requirement.txt"
+4) Run the python server by code "python3 app.py"
+
+### Next all four require to run Backend jobs- webhooks
+
+
+
+5) Initilising redis server by the code "redis-server", if in order to vacate the redis server, use the code "sudo service redis-server stop".
+
+## Option - 6 will run all the task of backend (task.py)
+6) Initilising the celery worker server (In Virtual environment) by the code "celery -A app.celery worker --loglevel=info"
+
+## Option-7 will enable the mailhog server
+7) Initilising the Mailhog server by the command "mailhog"
+
+## Option-8 will trigger the mail task
+8) Initilising the celery beat server (In Virtual environment) by the command "celery -A app.celery beat --loglevel=info"
+

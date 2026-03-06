@@ -7,6 +7,8 @@ load_dotenv()
 class Baseconfig:            
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
+    # CACHE_TYPE= "RedisCache" , # Flask-Caching related configs
+    # CACHE_DEFAULT_TIMEOUT = 300
 
 # Development configuration class
 # Local SQLite database for development
