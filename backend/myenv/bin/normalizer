@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/aman_pandey/Hospital Management System/backend/myenv/bin/python3" "$0" "$@"
+'''exec' "/home/aman_pandey/Hospital Management System/Hospital-Management-System/backend/myenv/bin/python3" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
